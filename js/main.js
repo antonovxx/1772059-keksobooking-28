@@ -1,4 +1,4 @@
 
-import { getOffers } from './data.js';
+import { createOffers } from './data.js';
 
-console.log(getOffers());
+console.log(createOffers());
