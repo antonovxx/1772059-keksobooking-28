@@ -80,7 +80,7 @@ const createCard = (data) => {
   const cardFeatures = card.querySelector('.popup__features');
   cardFeatures.innerHTML = '';
   if (offer.features) {
-    cardFeatures.appendChild(createFeatures(offer.features));
+    cardFeatures.append(createFeatures(offer.features));
   } else {
     cardFeatures.remove();
   }
@@ -88,7 +88,7 @@ const createCard = (data) => {
   const cardPhotos = card.querySelector('.popup__photos');
   cardPhotos.innerHTML = '';
   if(offer.photos) {
-    cardPhotos.appendChild(createPhotos(offer.photos));
+    cardPhotos.append(createPhotos(offer.photos));
   } else {
     cardPhotos.remove();
   }
