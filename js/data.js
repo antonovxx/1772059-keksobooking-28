@@ -52,11 +52,11 @@ const PHOTOS = [
 const LATITUDE = 35;
 const LONGITUDE = 139;
 const MIN_PRICE = 1000;
-const MAX_PRICE = 1000000;
+const MAX_PRICE = 20000;
 const MIN_ROOMS = 1;
-const MAX_ROOMS = 15;
+const MAX_ROOMS = 10;
 const MIN_GUESTS = 1;
-const MAX_GUESTS = 30;
+const MAX_GUESTS = 10;
 const COUNT_OFFERS = 10;
 const LOCATION_DECIMAL = 5;
 
@@ -66,7 +66,7 @@ const createOffer = () => {
 
   return {
     author: {
-      avatar: `../img/avatars/user${checkNumber(getRandomIntegerNumber(0, 11))}.png`,
+      avatar: `../img/avatars/user${checkNumber(getRandomIntegerNumber(1, 11))}.png`,
     },
     offer: {
       title: getRandomArrayElement(TITLES),
