@@ -1,7 +1,6 @@
 
 import { createOffers } from './data.js';
-import './similar-card.js';
-
-console.log(createOffers()[0]);
+import { createCard } from './similar-card.js';
+import './form.js';
 
 

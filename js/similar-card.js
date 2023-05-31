@@ -33,68 +33,100 @@ const filtrateGuestsEndings = (guestsCount) => {
   }
 };
 
-const createPhotos = (photos) => {
-  const photosFragment = document.createDocumentFragment();
-  photos.forEach((element) => {
-    const newPhoto = document.createElement('img');
-    newPhoto.classList.add('popup__photo');
-    newPhoto.src = element;
-    newPhoto.alt = 'Фотография жилья';
-    newPhoto.setAttribute('width', '45');
-    newPhoto.setAttribute('height', '40');
-    photosFragment.appendChild(newPhoto);
-  });
-  return photosFragment;
+const innerImg = (parent, cssClass, content) => {
+  const element = parent.querySelector(cssClass);
+  if(!content) {
+    element.remove();
+    return;
+  }
+  element.src = content;
 };
 
-const createFeatures = (features) => {
-  const featuresFragment = document.createDocumentFragment();
-  features.forEach((element) => {
-    const feature = document.createElement('li');
-    feature.classList.add('popup__feature', `popup__feature--${element}`);
-    featuresFragment.appendChild(feature);
+const innerSimpleText = (parent, cssClass, content, additionalContent = '') => {
+  const element = parent.querySelector(cssClass);
+  if(!content) {
+    element.remove();
+    return;
+  }
+  element.textContent = `${content} ${additionalContent}`;
+};
+
+const innerCapacityText = (parent, cssClass, firstContent, secondContent) => {
+  const element = parent.querySelector(cssClass);
+  if(!firstContent && !secondContent) {
+    element.remove();
+    return;
+  }
+  const firstText = firstContent ? `${firstContent} ${filtrateRoomsEndings(firstContent)}` : '';
+  const secondText = secondContent ? `для ${secondContent} ${filtrateGuestsEndings(secondContent)}` : '';
+  const devider = firstText && secondText ? ' ' : '';
+  element.textContent = `${firstText}${devider}${secondText}`;
+};
+
+const innerTimeText = (parent, cssClass, firstContent, secondContent) => {
+  const element = parent.querySelector(cssClass);
+  if(!firstContent && !secondContent) {
+    element.remove();
+    return;
+  }
+  const firstText = firstContent ? `Заезд после ${firstContent}` : '';
+  const secondText = secondContent ? `выезд до ${secondContent}` : '';
+  const devider = firstText && secondText ? ', ' : '';
+  element.textContent = `${firstText}${devider}${secondText}`;
+};
+
+const innerPhotos = (parent, cssClass, content) => {
+  const element = parent.querySelector(cssClass);
+  if(!content.length) {
+    element.remove();
+    return;
+  }
+
+  content.forEach((item) => {
+    const img = element.querySelector('.popup__photo').cloneNode(true);
+    img.src = item;
+    element.append(img);
   });
-  return featuresFragment;
+  element.querySelector('.popup__photo').remove();
+};
+
+const innerFeatures = (parent, cssClass, content) => {
+  const elements = parent.querySelectorAll(cssClass);
+  if(!content) {
+    elements.remove();
+    return;
+  }
+
+  const arrayFeatures = Array.from(elements);
+  arrayFeatures.forEach((feature) => {
+    for(const item of content) {
+      if(feature.classList.value === `popup__feature popup__feature--${item}`) {
+        feature.remove();
+      }
+    }
+  });
 };
 
 const createCard = (data) => {
   const {author, offer} = data;
   const card = templateCard.cloneNode(true);
 
-  card.querySelector('.popup__avatar').src = author.avatar || '';
-  card.querySelector('.popup__title').textContent = offer.title || '';
-  card.querySelector('.popup__text--address').textContent = (offer.address) ? `${offer.address.lat} ${offer.address.lng}` : '';
-  card.querySelector('.popup__text--price').textContent = (offer.price) ? `${offer.price} ₽/ночь` : '';
-  card.querySelector('.popup__type').textContent = APARTMENT_TYPES[offer.type] || '';
-  card.querySelector('.popup__description').textContent = offer.description || '';
-
-  card.querySelector('.popup__text--capacity').textContent = (offer.rooms || offer.guests)
-    ? `${offer.rooms} ${filtrateRoomsEndings(offer.rooms)} для ${offer.guests} ${filtrateGuestsEndings(offer.guests)}`
-    : 'Не для гостей';
-
-  card.querySelector('.popup__text--time').textContent = (offer.checkin || offer.checkout)
-    ? `Заезд после ${offer.checkin}, выезд до ${offer.checkout}`
-    : 'Забронировано';
-
-
-  const cardFeatures = card.querySelector('.popup__features');
-  cardFeatures.innerHTML = '';
-  if (offer.features) {
-    cardFeatures.append(createFeatures(offer.features));
-  } else {
-    cardFeatures.remove();
-  }
-
-  const cardPhotos = card.querySelector('.popup__photos');
-  cardPhotos.innerHTML = '';
-  if(offer.photos) {
-    cardPhotos.append(createPhotos(offer.photos));
-  } else {
-    cardPhotos.remove();
-  }
+  innerImg(card, '.popup__avatar', author.avatar);
+  innerSimpleText(card, '.popup__title', offer.title);
+  innerSimpleText(card, '.popup__type', APARTMENT_TYPES[offer.type]);
+  innerSimpleText(card, '.popup__description', offer.description);
+  innerSimpleText(card, '.popup__text--address', offer.address.lat, offer.address.lng);
+  innerSimpleText(card, '.popup__text--price', offer.price, '₽/ночь');
+  innerCapacityText(card, '.popup__text--capacity', offer.rooms, offer.guests);
+  innerTimeText(card, '.popup__text--time', offer.checkin, offer.checkout);
+  innerPhotos(card, '.popup__photos', offer.photos);
+  innerFeatures(card, '.popup__feature', offer.features);
 
   return card;
 };
 
-mapCanvas.append(createCard(createOffers()[0]));
+//mapCanvas.append(createCard(createOffers()[0]));
+
+export {createCard};
+
 
