@@ -1,5 +1,3 @@
-import { createOffers } from './data.js';
-
 const APARTMENT_TYPES = {
   'flat': 'Квартира',
   'bungalow': 'Бунгало',
@@ -9,7 +7,7 @@ const APARTMENT_TYPES = {
 };
 
 const templateCard = document.querySelector('#card').content.querySelector('.popup');
-const mapCanvas = document.querySelector('#map-canvas');
+
 
 const filtrateRoomsEndings = (roomsCount) => {
   switch (roomsCount) {
@@ -124,8 +122,6 @@ const createCard = (data) => {
 
   return card;
 };
-
-//mapCanvas.append(createCard(createOffers()[0]));
 
 export {createCard};
 
