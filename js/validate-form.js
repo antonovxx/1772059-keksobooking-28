@@ -43,7 +43,7 @@ const validatePrice = (value) => {
   return /^\d+$/.test(value) && inRange;
 };
 
-const getPriceMessage = () => `Выберите число между ${priceFieldElement.min} и ${MAX_PRICE}`;
+const getPriceMessage = () => `Выберите цену между ${priceFieldElement.min} и ${MAX_PRICE}`;
 
 const setPriceAttributes = (type) => {
   const minPrice = RESTRICTIONS_TYPE_OF_HOUSING[type].min;
@@ -67,6 +67,8 @@ typeFieldElement.addEventListener('change', () => {
   changeType();
 });
 
-pristine.addValidator(priceFieldElement, validatePrice, getPriceMessage, 1000, true);
+const initPriceValidator = () => pristine.addValidator(priceFieldElement, validatePrice, getPriceMessage, 1000, true);
+
+initPriceValidator();
 
 
